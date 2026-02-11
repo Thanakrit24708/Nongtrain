@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>NONGTRAIN Premium</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="app-container">
+
+  <!-- HEADER -->
+  <header class="header" id="main-header">
+    <div class="header-content">
+      <div>
+        <h1>NONGTRAIN</h1>
+        <p>Premium AI Coach</p>
+      </div>
+    </div>
+    <div class="date-badge" id="current-date">Today</div>
+  </header>
+
+  <!-- ONBOARDING STEP -->
+  <section id="onboarding" class="tab active">
+    <div class="glass-card onboarding-box">
+      <div class="step-progress"><div class="step-bar" id="step-bar"></div></div>
+      <form id="setupForm" novalidate>
+        
+        <!-- STEP 1: NAME -->
+        <div class="onboarding-step active" data-step="1">
+          <h3>ยินดีที่ได้รู้จัก! 👋</h3>
+          <p>บอกชื่อเล่นให้เรารู้จักหน่อย</p>
+          <input id="setup-name" placeholder="ชื่อเล่นของคุณ">
+          <button type="button" onclick="nextStep(2)">ถัดไป</button>
+        </div>
+
+        <!-- STEP 2: GENDER -->
+        <div class="onboarding-step" data-step="2">
+          <h3>เพศสภาพ ⚧️</h3>
+          <p>เพื่อการคำนวณแคลอรี่ที่แม่นยำ</p>
+          <div class="selection-grid">
+            <label class="selection-card">
+              <input type="radio" name="gender" value="male" checked>
+              <div class="card-content">👨 ชาย</div>
+            </label>
+            <label class="selection-card">
+              <input type="radio" name="gender" value="female">
+              <div class="card-content">👩 หญิง</div>
+            </label>
+          </div>
+          <div class="btn-group" style="display:flex; gap:10px; margin-top:20px;">
+            <button type="button" class="secondary" onclick="nextStep(1)">ย้อนกลับ</button>
+            <button type="button" onclick="nextStep(3)">ถัดไป</button>
+          </div>
+        </div>
+
+        <!-- STEP 3: AGE -->
+        <div class="onboarding-step" data-step="3">
+          <h3>อายุเท่าไหร่ครับ? 🎂</h3>
+          <input id="setup-age" type="number" placeholder="อายุ (ปี)">
+          <div class="btn-group" style="display:flex; gap:10px;">
+            <button type="button" class="secondary" onclick="nextStep(2)">ย้อนกลับ</button>
+            <button type="button" onclick="nextStep(4)">ถัดไป</button>
+          </div>
+        </div>
+
+        <!-- STEP 4: BODY STATS -->
+        <div class="onboarding-step" data-step="4">
+          <h3>สัดส่วนปัจจุบัน 📏</h3>
+          <p>ความสูงและน้ำหนักของคุณ</p>
+          <div style="margin-bottom:15px;">
+            <label style="font-size:12px; display:block; text-align:left; margin-bottom:5px;">ส่วนสูง (cm)</label>
+            <input id="setup-height" type="number" placeholder="เช่น 175">
+          </div>
+          <div>
+            <label style="font-size:12px; display:block; text-align:left; margin-bottom:5px;">น้ำหนัก (kg)</label>
+            <input id="setup-weight" type="number" placeholder="เช่น 70">
+          </div>
+          <div class="btn-group" style="display:flex; gap:10px; margin-top:10px;">
+            <button type="button" class="secondary" onclick="nextStep(3)">ย้อนกลับ</button>
+            <button type="button" onclick="nextStep(5)">ถัดไป</button>
+          </div>
+        </div>
+
+        <!-- STEP 5: ACTIVITY LEVEL -->
+        <div class="onboarding-step" data-step="5">
+          <h3>กิจกรรมประจำวัน 🏃‍♂️</h3>
+          <p>คุณขยับร่างกายมากแค่ไหน?</p>
+          <select id="setup-activity" style="text-align:center;">
+             <option value="1.2">นั่งทำงานตลอด (Sedentary)</option>
+             <option value="1.375" selected>ออกกำลังกาย 1-3 วัน/วีค</option>
+             <option value="1.55">ออกกำลังกาย 3-5 วัน/วีค</option>
+             <option value="1.725">ออกกำลังกายหนัก 6-7 วัน/วีค</option>
+             <option value="1.9">นักกีฬา / ใช้แรงงานหนัก</option>
+          </select>
+          <div class="btn-group" style="display:flex; gap:10px;">
+            <button type="button" class="secondary" onclick="nextStep(4)">ย้อนกลับ</button>
+            <button type="button" onclick="nextStep(6)">ถัดไป</button>
+          </div>
+        </div>
+
+        <!-- STEP 6: GOAL -->
+        <div class="onboarding-step" data-step="6">
+          <h3>เป้าหมายของคุณ 🎯</h3>
+          
+          <label style="font-size:12px; display:block; text-align:left; margin-bottom:5px;">อยากทำอะไร?</label>
+          <select id="setup-goal">
+            <option value="cut">ต้องการลดน้ำหนัก</option>
+            <option value="maintain">รักษาน้ำหนัก</option>
+            <option value="bulk">เพิ่มน้ำหนัก/กล้ามเนื้อ</option>
+          </select>
+
+          <div id="target-weight-box">
+            <label style="font-size:12px; display:block; text-align:left; margin-bottom:5px;">น้ำหนักเป้าหมาย (kg)</label>
+            <input id="setup-target-weight" type="number" placeholder="เป้าหมายของคุณ">
+            
+            <label style="font-size:12px; display:block; text-align:left; margin-bottom:5px;">ต้องการให้สำเร็จภายใน (สัปดาห์)</label>
+            <input id="setup-weeks" type="number" placeholder="เช่น 12 สัปดาห์" value="12">
+          </div>
+
+          <div class="btn-group" style="display:flex; gap:10px; margin-top:10px;">
+            <button type="button" class="secondary" onclick="nextStep(5)">ย้อนกลับ</button>
+            <button type="submit">คำนวณแผนการลดหุ่น!</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </section>
+
+  <!-- HOME TAB -->
+  <section id="home" class="tab">
+    
+    <div class="user-greeting">
+      <h2>สวัสดี, <span id="user-name" class="highlight-text">User</span></h2>
+      <p style="color:var(--text-muted)">เป้าหมาย: <span id="user-goal">Goal</span></p>
+    </div>
+
+    <!-- AI SECTION -->
+    <div style="margin-top: 20px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; padding: 0 5px;">
+        <span style="font-weight:700; color:#334155; font-size: 1.1rem;">✨ เมนูแนะนำวันนี้</span>
+        <div>
+          <button onclick="toggleShoppingList()" style="width:auto; padding:6px 12px; font-size:12px; background:#3b82f6; margin-right:5px;">🛒 ซื้อของ</button>
+          <button onclick="loadAiFood(true)" style="width:auto; padding:6px 12px; font-size:12px; background:var(--primary);">🔄 คิดใหม่</button>
+        </div>
+      </div>
+
+      <!-- Scrollable AI Food -->
+      <div id="ai-food-container" class="ai-scroll-container">
+        <div style="color:#64748b; font-size:0.9rem; padding:10px;">⏳ กำลังคิดเมนูอร่อยๆ...</div>
+      </div>
+      
+      <!-- Shopping List Modal (Hidden by default) -->
+      <div id="shopping-list-area" class="shopping-list-area">
+        <h4 style="margin-bottom:10px; color:var(--text-main);">🛒 รายการจ่ายตลาด</h4>
+        <div id="shopping-list-items"></div>
+        <button onclick="toggleShoppingList()" class="secondary" style="margin-top:10px;">ปิด</button>
+      </div>
+    </div>
+
+    <!-- MAIN DASHBOARD -->
+    <div class="glass-card" style="margin-top: 20px; text-align:center;">
+      <div class="circle-container">
+        <div class="outer-circle" id="cal-circle">
+          <div class="inner-circle">
+            <span class="cal-big" id="val-cal-remain">0</span>
+            <span class="cal-label">กินได้อีก (Kcal)</span>
+          </div>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; border-top:1px solid #f1f5f9; padding-top:20px;">
+        <div class="mini-stat" onclick="showQuotaDetails()" style="cursor:pointer;">
+          <span class="label" style="font-size:11px; color:#94a3b8; display:block;">โควต้า</span>
+          <span class="val" id="val-target" style="font-size:16px; font-weight:700;">0</span>
+        </div>
+        <div class="mini-stat" onclick="showInDetails()" style="cursor:pointer;">
+          <span class="label" style="font-size:11px; color:#94a3b8; display:block;">รับเข้า</span>
+          <span class="val" id="val-eaten" style="font-size:16px; font-weight:700; color:var(--accent);">0</span>
+        </div>
+        <div class="mini-stat" onclick="showOutDetails()" style="cursor:pointer;">
+          <span class="label" style="font-size:11px; color:#94a3b8; display:block;">ใช้ไป</span>
+          <span class="val" id="val-burned" style="font-size:16px; font-weight:700; color:var(--secondary);">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEATURES: EXERCISE & IF -->
+    <div class="feature-grid">
+      <div class="feature-card" onclick="openExerciseModal()">
+        <div class="feature-icon" style="background:#e0f2fe; color:#0ea5e9;">
+          <span class="material-icons-round">directions_run</span>
+        </div>
+        <span class="feature-title">ออกกำลังกาย</span>
+        <span class="feature-val" id="text-burned">0 kcal</span>
+      </div>
+      <div class="feature-card" onclick="openFastingModal()">
+        <div class="feature-icon" style="background:#fef3c7; color:#f59e0b;">
+          <span class="material-icons-round">timer</span>
+        </div>
+        <span class="feature-title">IF Timer</span>
+        <span class="feature-val" id="text-fasting-status">Ready</span>
+      </div>
+    </div>
+
+    <!-- EXERCISE MODAL (Dialog) -->
+    <dialog id="exercise-modal">
+      <h3 style="margin-bottom:15px; text-align:center;">บันทึกการเบิร์น 🔥</h3>
+      <!-- [New] Suggestion Box -->
+      <div id="exercise-suggestion" style="background:#f0f9ff; border:1px solid #bae6fd; border-radius:12px; padding:10px; margin-bottom:15px; font-size:12px; display:none;"></div>
+      <label style="font-size:12px; color:#64748b; margin-bottom:4px; display:block;">ประเภทกิจกรรม</label>
+      <select id="exercise-type">
+        <optgroup label="Cardio & Aerobic">
+            <option value="run">🏃‍♂️ วิ่ง (Running)</option>
+            <option value="walk">🚶 เดินเร็ว (Walking)</option>
+            <option value="cycle">🚴 ปั่นจักรยาน (Cycling)</option>
+            <option value="swim">🏊‍♀️ ว่ายน้ำ (Swimming)</option>
+            <option value="hiit">🔥 HIIT / Circuit Training</option>
+            <option value="rope">➰ กระโดดเชือก (Jump Rope)</option>
+            <option value="dance">💃 เต้น (Dancing / Zumba)</option>
+        </optgroup>
+        <optgroup label="Sports">
+            <option value="badminton">🏸 แบดมินตัน</option>
+            <option value="boxing">🥊 ชกมวย (Boxing)</option>
+            <option value="basketball">🏀 บาสเกตบอล</option>
+            <option value="football">⚽ ฟุตบอล</option>
+            <option value="tennis">🎾 เทนนิส</option>
+        </optgroup>
+        <optgroup label="Gym & Home">
+            <option value="weight">🏋️ เวทเทรนนิ่ง (Weight Training)</option>
+            <option value="yoga">🧘‍♀️ โยคะ (Yoga)</option>
+            <option value="pilates">🤸 พิลาทิส (Pilates)</option>
+        </optgroup>
+        <optgroup label="Daily Life">
+            <option value="housework">🧹 ทำงานบ้าน (Housework)</option>
+            <option value="gardening">🌳 ทำสวน (Gardening)</option>
+        </optgroup>
+      </select>
+      <input type="number" id="exercise-duration" placeholder="ระยะเวลา (นาที)" style="margin-top:5px;">
+      
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:20px;">
+        <button class="secondary" onclick="document.getElementById('exercise-modal').close()">ยกเลิก</button>
+        <button onclick="saveExercise()">บันทึก</button>
+      </div>
+    </dialog>
+
+    <!-- FASTING MODAL (Dialog) -->
+    <dialog id="fasting-modal">
+      <div style="text-align:right;">
+        <button onclick="document.getElementById('fasting-modal').close()" style="width:auto; padding:4px 8px; background:none; color:#94a3b8; box-shadow:none;"><span class="material-icons-round">close</span></button>
+      </div>
+      <h3 style="margin-bottom:5px; text-align:center;">IF Timer (16/8) ⏱️</h3>
+      <div style="text-align:center; padding:20px 0;">
+        <h1 id="fasting-timer" style="font-size:56px; color:var(--text-main); font-variant-numeric: tabular-nums;">00:00:00</h1>
+        <p id="fasting-label" style="color:var(--text-muted);">เริ่มนับเวลาอดอาหาร</p>
+      </div>
+      <button id="fasting-btn-action" onclick="toggleFasting()">เริ่ม Fasting</button>
+    </dialog>
+
+    <!-- SETTINGS MODAL REMOVED -->
+
+    <!-- EDIT PROFILE MODAL REMOVED -->
+        
+    <!-- GLOBAL ALERT MODAL -->
+    <dialog id="global-modal" class="custom-modal">
+      <div style="text-align:center;">
+        <div id="modal-icon" style="font-size:48px; margin-bottom:10px;">✨</div>
+        <h3 id="modal-title" style="margin-bottom:10px; color:var(--text-main);">Title</h3>
+        <p id="modal-msg" style="color:var(--text-muted); margin-bottom:20px;">Message</p>
+          <div id="modal-actions" style="display:flex; gap:10px; justify-content:center;">
+          <button id="btn-ok" onclick="closeModal()">ตกลง</button>
+          <button id="btn-cancel" class="secondary" style="display:none;" onclick="closeModal()">ยกเลิก</button>
+          <button id="btn-yes" style="display:none;" onclick="confirmAction()">ยืนยัน</button>
+        </div>
+      </div>
+    </dialog>
+
+
+    <div class="macro-row-airy">
+      <div class="macro-card-airy">
+        <span class="macro-title" style="color:#f43f5e;">Pro</span>
+        <div style="background:#fee2e2; height:4px; border-radius:4px; margin:5px 0;"><div style="background:#f43f5e; width:0; height:100%;" id="bar-p"></div></div>
+        <small id="val-p">0g</small>
+      </div>
+      <div class="macro-card-airy">
+        <span class="macro-title" style="color:#f59e0b;">Carb</span>
+        <div style="background:#fef3c7; height:4px; border-radius:4px; margin:5px 0;"><div style="background:#f59e0b; width:0; height:100%;" id="bar-c"></div></div>
+        <small id="val-c">0g</small>
+      </div>
+      <div class="macro-card-airy">
+        <span class="macro-title" style="color:#3b82f6;">Fat</span>
+        <div style="background:#dbeafe; height:4px; border-radius:4px; margin:5px 0;"><div style="background:#3b82f6; width:0; height:100%;" id="bar-f"></div></div>
+        <small id="val-f">0g</small>
+      </div>
+    </div>
+
+    <!-- WATER -->
+    <div class="glass-card feature-card" style="flex-direction:row; justify-content:space-between; margin-bottom:20px; cursor:default;">
+      <div style="display:flex; align-items:center; gap:15px;">
+        <div class="feature-icon" style="background:#cfeafc; color:#0284c7; width:45px; height:45px; margin:0;"><span class="material-icons-round">water_drop</span></div>
+        <div style="text-align:left;">
+          <span style="font-weight:700; display:block;">ดื่มน้ำ</span>
+          <small style="color:#64748b;">เป้าหมาย 8 แก้ว</small>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:15px;">
+        <button onclick="updateWater(-1)" class="secondary" style="width:36px; height:36px; padding:0; border-radius:10px;">-</button>
+        <span id="water-count" style="font-size:20px; font-weight:700;">0</span>
+        <button onclick="updateWater(1)" class="secondary" style="width:36px; height:36px; padding:0; border-radius:10px;">+</button>
+      </div>
+    </div>
+
+    <div class="section-title" style="display:flex; justify-content:space-between; margin-bottom:15px;">
+      <span style="font-weight:700;">วันนี้กินอะไรไปบ้าง?</span>
+      <small id="history-count" style="color:#94a3b8;">0 รายการ</small>
+    </div>
+    <div id="today-food-list" style="display:flex; flex-direction:column; gap:10px; margin-bottom:80px;">
+      <!-- Food Items will render here -->
+    </div>
+
+  </section>
+
+  <!-- NUTRITION TAB (Search) -->
+  <section id="nutrition" class="tab">
+    <div class="glass-card">
+      <h3 style="margin-bottom:20px;">🍽 บันทึกมื้ออาหาร</h3>
+      <label style="font-size:12px; font-weight:700; color:#64748b; margin-bottom:5px; display:block;">ค้นหาเมนู</label>
+      <input list="menu-list" id="food-search" placeholder="พิมพ์ชื่อเมนู..." onchange="autoFillFood()">
+      <datalist id="menu-list"></datalist>
+
+      <div style="width:100%; height:1px; background:#e2e8f0; margin:20px 0;"></div>
+      
+      <label style="font-size:12px; font-weight:700; color:#64748b; margin-bottom:5px; display:block;">รายละเอียด</label>
+      <input id="food-name" type="text" placeholder="ชื่อเมนูอาหาร">
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+        <div><input id="food-protein" type="number" placeholder="Pro"></div>
+        <div><input id="food-carb" type="number" placeholder="Carb"></div>
+        <div><input id="food-fat" type="number" placeholder="Fat"></div>
+      </div>
+      <button onclick="saveFood()" style="margin-top:20px;">บันทึกรายการ</button>
+    </div>
+  </section>
+
+  <!-- PROGRESS TAB -->
+  <section id="progress" class="tab">
+    <div class="glass-card">
+      <h3 style="margin-bottom:20px;">📈 แนวโน้มน้ำหนัก</h3>
+      <div style="display:flex; gap:10px; margin-bottom:20px;">
+        <input id="dailyWeight" type="number" placeholder="น้ำหนักวันนี้ (kg)">
+        <button onclick="saveWeight()" style="width:auto; padding:0 24px;">บันทึก</button>
+      </div>
+      <div style="height:300px;">
+        <canvas id="weightChart"></canvas>
+      </div>
+    </div>
+    
+    <!-- Photo Gallery Mockup -->
+    <div class="glass-card">
+      <h3 style="margin-bottom:15px;">📸 Body Update</h3>
+      <div style="background:#f1f5f9; padding:30px; border-radius:16px; text-align:center; color:#94a3b8; border:2px dashed #cbd5e1;">
+        <span class="material-icons-round" style="font-size:36px; display:block; margin-bottom:10px;">add_a_photo</span>
+        <p>ฟีเจอร์นี้กำลังพัฒนา...</p>
+        <small>เร็วๆ นี้คุณจะสามารถอัปโหลดรูปหุ่นได้!</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAT TAB -->
+  <section id="chat" class="tab">
+    <div class="chat-container-full">
+      <div class="chat-header">Fast AI Coach</div>
+      <div id="chat-history" style="flex:1; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:12px;"></div>
+      <div class="chat-input-area" style="padding:15px; background:white; border-top:1px solid #f1f5f9;">
+        <input id="chat-msg" placeholder="ถามเทคนิคการลดหุ่น..." style="margin:0;">
+        <button onclick="sendChat()" style="width:auto; padding:15px;"><span class="material-icons-round">send</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACCOUNT TAB -->
+  <section id="account" class="tab">
+    <div style="text-align:center; padding:30px 0;">
+      <div style="width:100px; height:100px; background:#10b981; border-radius:50%; margin:0 auto 15px; color:white; font-size:40px; font-weight:800; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 20px rgba(16,185,129,0.3);" id="profile-avatar">NT</div>
+      <h2 id="profile-name">User</h2>
+      <p id="profile-goal-display" style="color:#64748b;">Goal</p>
+    </div>
+    
+    <div class="glass-card">
+      <div style="display:flex; justify-content:space-between; padding:15px; border-bottom:1px solid #f1f5f9;">
+        <span style="color:#64748b;">สัดส่วน</span>
+        <span style="font-weight:700;" id="profile-stats">-</span>
+      </div>
+      <div style="display:flex; justify-content:space-between; padding:15px; border-bottom:1px solid #f1f5f9;">
+        <span style="color:#64748b;">ดัชนีมวลกาย (BMI)</span>
+        <span style="font-weight:700;" id="profile-bmi">-</span>
+      </div>
+      <div style="display:flex; justify-content:space-between; padding:15px;">
+        <span style="color:#64748b;">ค่าการเผาผลาญ (TDEE)</span>
+        <span style="font-weight:700;" id="profile-calories">-</span>
+      </div>
+    </div>
+
+    <div class="glass-card" style="margin-top:15px;">
+      <div style="padding:15px; border-bottom:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center;" onclick="showAlert('Coming Soon', 'ฟีเจอร์นี้กำลังพัฒนาครับ', '🔔')">
+        <span style="color:#334155;">🔔 การแจ้งเตือน</span>
+        <span class="material-icons-round" style="font-size:16px; color:#cbd5e1;">chevron_right</span>
+      </div>
+      <div style="padding:15px; display:flex; justify-content:space-between; align-items:center;" onclick="openSettings()">
+        <span style="color:#334155;">⚙️ ตั้งค่าระบบ</span>
+        <span class="material-icons-round" style="font-size:16px; color:#cbd5e1;">chevron_right</span>
+      </div>
+    </div>
+    
+    <div style="display:flex; gap:10px; margin-top:20px;">
+        <!-- <button onclick="openEditProfile()" class="secondary" style="flex:1;">✏️ แก้ไขข้อมูล</button> -->
+        <button onclick="logout()" style="background:#fee2e2; color:#ef4444; box-shadow:none; flex:1;">ออกจากระบบ</button>
+    </div>
+  </section>
+
+  <!-- NAV BAR -->
+  <div class="nav hidden" id="nav">
+    <button onclick="showTab('home')" id="btn-home" class="active"><span class="material-icons-round">home</span></button>
+    <button onclick="showTab('nutrition')" id="btn-nutrition"><span class="material-icons-round">restaurant</span></button>
+    <button onclick="showTab('progress')" id="btn-progress"><span class="material-icons-round">show_chart</span></button>
+    <button onclick="showTab('chat')" id="btn-chat"><span class="material-icons-round">smart_toy</span></button>
+    <button onclick="showTab('account')" id="btn-account"><span class="material-icons-round">person</span></button>
+  </div>
+
+</div>
+
+<script src="assets/calc.js"></script>
+<script src="assets/foods.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
